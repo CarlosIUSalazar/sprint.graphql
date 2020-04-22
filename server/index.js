@@ -16,6 +16,8 @@ const schema = buildSchema(`
   }
 `);
 
+.
+
 // The root provides the resolver functions for each type of query or mutation.
 const root = {
   Pokemons: () => {
