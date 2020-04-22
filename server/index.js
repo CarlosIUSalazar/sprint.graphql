@@ -61,9 +61,18 @@ const schema = buildSchema(`
     Pokemon(name: String!): Pokemon
     PokemonById(id: String): Pokemon
     PokeAttacks(type: String) : [Attack]
-    
+    PokeType(name:String!): [Pokemon]
+    PokeByAttack(name:String!): [Pokemon]
+  }
+
+  type Mutation {
+    addType(name:String!):[String]
+    modifyPokeType(name:String!, newName:String):[String]
+    modifyPokemonName(name:String!, newName:String):[Pokemon]
   }
 `);
+
+//PokeSingleAttack(name: String!): Attack
 
 //    PokemonsByAttack(attack: String): Attacks
 // type Mutation {
@@ -93,8 +102,7 @@ const root = {
     let res;
     if (request.type === "fast") {
       res = data.attacks.fast;
-    }
-    if (request.type === "special") {
+    } else if (request.type === "special") {
       res = data.attacks.special;
     }
     console.log("ATAAAAACK", res);
@@ -114,8 +122,94 @@ const root = {
     //console.log("RESSSUUUUUUULT", result);
     return result;
   },
-};
 
+  PokeType: (request) => {
+    const result = [];
+    data.pokemon.forEach((poke) => {
+      if (pokemon.types.includes(request.name)) {
+        result.push(poke);
+      }
+    });
+    console.log("Resuuuuult", poke);
+    return result;
+  },
+
+  //PokeSingleAttack:(request) => {
+
+  PokeByAttack: (request) => {
+    let result = [];
+    data.pokemon.forEach((pokemon) => {
+      for (const obj of pokemon.attacks.fast) {
+        if (obj.name === request.name) result.push(pokemon);
+      }
+
+      for (const obj of pokemon.attacks.special) {
+        if (obj.name === request.name) result.push(pokemon);
+      }
+    });
+    return result;
+  },
+
+  //////////MUTATIONS//////////
+
+  addType: (request) => {
+    data.types.push(request.name);
+    console.log("NEW TYPEEEES", data.types);
+    return data.types;
+    // # mutation {
+    //   #   addType(name:"PIZZZAA")
+    //   # }
+  },
+
+  modifyPokeType: (request) => {
+    console.log("request.nameeee", request.name);
+    console.log("request.newNameee", request.newName);
+    console.log("data.typesssss", data.types);
+    // for(let item of data.types){
+    //   if(data.types[item] === request.name){
+    //     console.log("current item", data.types[item])
+    //     data.types[item] = request.newName;
+    //   }
+    // }
+
+    // data.types.forEach((typez) => {
+    //   if(typez === request.name){
+    //     typez = request.newName
+    //   }
+    // })
+
+    for (let i = 0; i < data.types.length; i++) {
+      if (data.types[i] === request.name) {
+        data.types[i] = request.newName;
+      }
+    }
+    return data.types;
+    // mutation {
+    //   modifyPokeType(name:"Dragon",newName:"FUUUUU")
+    // }
+  },
+
+  modifyPokemonName: (request) => {
+    //console.log("data.pokemonssss",data.pokemon)
+    //console.log("request.nameeee",request.name)
+    //console.log("request.newNameee",request.newName)
+    data.pokemon.forEach((poke) => {
+      //console.log("current nameee",poke.name)
+      if (poke.name === request.name) {
+        //console.log("TRUEEEE")
+        poke.name = request.newName;
+      }
+    });
+    //console.log(data.pokemon)
+    return data.pokemon;
+    // # mutation {
+    //   #   modifyPokemonName(name:"Bulbasaur", newName:"ICECREAM!!") {
+    //   #     id
+    //   #     name
+    //   #   }
+    //   # }
+  },
+};
 // Start your express server!
 const app = express();
 
