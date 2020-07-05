@@ -1,17 +1,16 @@
 <img src="https://cdn-images-1.medium.com/max/1000/1*IvCDlfi3vQfgyKO1eFv4jA.png" alt="graphql" width="400">
-### This was created during my time as a [Code Chrysalis](https://codechrysalis.io) Student
 
 # GraphQL
 
-## 1. サーバーのクイックスタート
+## 1. Server Quick Start
 
-`yarn start` を実行して、サーバーを起動しましょう。
+Run `yarn start` to start the server.
 
-代わりに `yarn dev` を実行して、ファイルに変更があった場合にサーバーを自動的に再起動するようにしましょう（`nodemon` を使うことで実現しています）。
+Run `yarn dev` instead to automatically restart the server when any file changes thanks to `nodemon`.
 
-`http://localhost:4000/graphql` にアクセスして、サーバーが起動していることを確認しましょう。
+Visit `http://localhost:4000/graphql` to test that the server is running.
 
-テストできるクエリは次のとおりです：
+Here are some queries you can test:
 
 ```
 {
@@ -31,25 +30,25 @@
 }
 ```
 
-## 2. スキーマ
+## 2. Schema
 
-- 現在、サーバーはポケモンの ID と名前を提供するように設定されています。体重、アタック、進化系についても取得したい場合にはどうしたらよいでしょうか？
+- Right now, the server is only set up to provide the Pokemon's id and name. What if you also wanted to get their weight, attacks, and evolutions?
 
-- そのためには、スキーマを更新する必要があります。（`server/index.js` 内の）スキーマでは、利用可能なすべてのデータオブジェクトをモデル化する必要があります。`server/data/pokemon.js` を見て、スキーマに追加できる他のフィールドを確認してください。
+- To do that, you will need to update the schema. The schema (in `server/index.js`) should model the full data object available. Take a look at `server/data/pokemon.js` to see what other fields you can add to the schema.
 
-- スキーマを更新して、ポケモンのデータオブジェクトをスキーマとして完全に表現してください！
+- Update your schema so it fully represents your Pokemon data object!
 
-- 設計したスキーマをテストしてください！GraphiQL に戻って、いくつかのクエリをテストしてください。GraphQL のすばらしい点は、利用可能な場合でも、完全なデータオブジェクトを取得する必要がないことです。エクスプローラーの右側にある `Docs` をクリックして、完全なスキーマを表示してください。
+- Test your work! Go back to GraphiQL to test some queries. Remember, the magic of GraphQL is that you don't have to get back the full data object, even if it is available. Click `Docs` on the right side of the explorer to see your full schema.
 
-## 3. リゾルバ
+## 3. Resolvers
 
-- `server/index.js` のリゾルバは、クエリで要求されたデータを返す関数です。これらの関数の名前が、スキーマの type `Query` にリストアップされているクエリの名前と一致していることに気づくでしょう。
+- The resolvers in `server/index.js` are functions that return the data requested in the queries. You will notice that the names of these functions match the names of the queries listed in the type `Query` in your schema.
 
-- ここで、別のタイプのリゾルバを追加できます。あなたが興味のある別種類のクエリを考えて、ここに追加してください！
+- This is where you can add additional types of resolvers. Think about what other types of queries you are interested in and add them here!
 
 ## 4. Mutations
 
-- Mutations を追加したい場合、構成は少し異なります。`type` キーワードを使用する代わりに、`input` キーワードを使用してください。さらに、スキーマ内に `Mutation` と呼ばれるタイプを作成する必要があります。具体例については、以下を参照してください！
+- If you want to add a mutation, the structure is a little different. Instead of using the keyword `type`, use the keyword `input`. Additionally, you will need to create a type called `Mutation` inside your schema. See below for an example!
 
 ```
 input MessageInput {
@@ -73,19 +72,19 @@ type Mutation {
 }
 ```
 
-## 5. フロントエンド
+## 5. Frontend
 
-- `localhost:4000/graphql` を使用して、すべての内容を引き続きテストできます。
+- You can continue to test all of this using `localhost:4000/graphql`.
 
-## 基礎レベル
+## Basic Requirements
 
-- スキーマ
-  - ポケモンのデータオブジェクトを完全に表現したスキーマに更新してください！
-  - タイプとアタックにアクセスできるように、スキーマを新たに追加してください！
-- リゾルバ
-  - 名前（すでに実装されている）または Id でポケモンを検索できるようにしてください。
-  - 例えば、`Attacks(type: "fast")` のように、アタックを簡単に検索・フィルタリングできるように、リゾルバを新たに追加してください。
-  - 特定のタイプのポケモンをすべて取得するためのリゾルバ（+ フィールドリゾルバ）を追加してください。クエリの例：
+- Schema
+  - Update your schema so it fully represents your Pokemon data object!
+  - Add to your Schema so you can also access Types and Attacks!
+- Resolvers
+  - Make it possible to find Pokemon by either name (already implemented) or Id
+  - Add Resolvers to easily look for and filter attacks, something like `Attacks(type: "fast")`
+  - Add a Resolver (+ Field Resolver) to show all Pokemon of a certain type. Query Example:
     ```
     query {
       type(name: "Dragon") {
@@ -96,7 +95,7 @@ type Mutation {
       }
     }
     ```
-  - 特定のアタックを持つポケモンをすべて取得するためのリゾルバ（+ フィールドリゾルバ）を追加してください。クエリの例：
+  - Add a Resolver (+ Field Resolver) to show all Pokemon that have a certain attack. Query Example:
     ```
     query {
       attack(name: "Solar Beam") {
@@ -111,16 +110,16 @@ type Mutation {
     }
     ```
 - Mutations
-  - ポケモン、タイプ、タイプを変更（追加、修正、削除を含む）するための Mutations を作成してください。
+  - Create mutations to modify Pokemon, Types and Attacks; including adding, editing and removing them
 
-## 中級レベル
+## Medium Requirements
 
-- すべての GraphQL クエリの単体テストを作成してください！効率的にテストを行う方法を見つけて、試してみてください！
+- Write unit tests for all your GraphQL queries! Find out how to effectively do it, then do it!
 
-## 応用レベル
+## Advanced Requirements
 
-- `express-graphql` の代わりに、`apollo` と呼ばれる別の有名なフレームワークを使用して、すべての内容をセットアップしてみましょう。
+- Instead of `express-graphql`, use another popular framework to set upeverything, called `apollo`
 
-## ナイトメアモード
+## Nightmare Mode
 
-- データベースに接続してデータを保存してみましょう。
+- Hook up a Database to store your data in
